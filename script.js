@@ -60,11 +60,25 @@ function operate(firstNumber, secondNumber, operator){
 let firstValue = "";
 let secondValue = "";
 let operand = "";
+let dot = false;
 
 let output = document.querySelector("#output");
 let clear = document.querySelector("#clear");
 let numbers = Array.from(document.querySelectorAll(".number"));
 let operators = Array.from(document.querySelectorAll(".operator"));
+let dotButton = document.querySelector("#dot");
+let backspace = document.querySelector("#backspace");
+
+function deleteElement(){
+    if(output.textContent.length > 0)
+    {
+        console.log(output.textContent.slice(0,-1));
+        inputValue = output.textContent.slice(0,-1)
+        output.textContent = inputValue;
+    }
+}
+
+backspace.addEventListener("click", deleteElement);
 
 
 let inputValue = "";
@@ -83,14 +97,18 @@ numbers.forEach(number => number.addEventListener("click",function(e){
         firstValue = "";
         ravno = false;
     }
+    if(e.target.innerText === "."){
+        dotButton.disabled = true;
+    };
     console.log(e.target.innerText)
     inputValue += e.target.innerText;
     output.textContent =  inputValue;
 }));
 
 operators.forEach(operator => operator.addEventListener("click",function(e){
+    dotButton.disabled = false;
     if(e.target.textContent === "="){
-        secondValue = parseInt(inputValue);
+        secondValue = parseFloat(inputValue);
         firstValue = operate(firstValue, secondValue, operand);
         inputValue = firstValue;
         operand = "";
@@ -98,7 +116,7 @@ operators.forEach(operator => operator.addEventListener("click",function(e){
     }
     else if(e.target.textContent !== "=" && firstValue.length !== 0){
         if(operand.length !== 0){
-            secondValue = parseInt(inputValue);
+            secondValue = parseFloat(inputValue);
             inputValue = "";
             firstValue = operate(firstValue, secondValue, operand);
             operand = e.target.textContent;
@@ -108,7 +126,7 @@ operators.forEach(operator => operator.addEventListener("click",function(e){
         inputValue = "";
     }
     else{
-        firstValue = parseInt(inputValue);
+        firstValue = parseFloat(inputValue);
         inputValue = "";
         operand = e.target.textContent;
         ravno = false;
