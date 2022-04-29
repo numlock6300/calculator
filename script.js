@@ -69,16 +69,69 @@ let operators = Array.from(document.querySelectorAll(".operator"));
 let dotButton = document.querySelector("#dot");
 let backspace = document.querySelector("#backspace");
 
+
+document.addEventListener("keydown", function(e){
+    let keyBoardButton = document.querySelector(`button[data-key="${e.key}"]`);
+    if(!keyBoardButton){return}
+    if(parseInt(keyBoardButton.textContent) >=0 && parseInt(keyBoardButton.textContent) <=9){
+        inputNumbers(keyBoardButton);
+    }
+    else if(keyBoardButton.id === "backspace"){deleteElement()}
+    else{inputOperator(keyBoardButton)}
+});
+
 function deleteElement(){
     if(output.textContent.length > 0)
     {
-        console.log(output.textContent.slice(0,-1));
         inputValue = output.textContent.slice(0,-1)
         output.textContent = inputValue;
     }
 }
 
+function inputNumbers(number){
+    if(ravno){
+        inputValue = "";
+        firstValue = "";
+        ravno = false;
+    }
+    if(number.innerText === "."){
+        dotButton.disabled = true;
+    };
+    console.log(number.innerText)
+    inputValue += number.innerText;
+    output.textContent =  inputValue;
+}
+
+function inputOperator(operator){
+    dotButton.disabled = false;
+    if(operator.textContent === "="){
+        secondValue = parseFloat(inputValue);
+        firstValue = operate(firstValue, secondValue, operand);
+        inputValue = firstValue;
+        operand = "";
+        ravno = true;
+    }
+    else if(operator.textContent !== "=" && firstValue.length !== 0){
+        if(operand.length !== 0){
+            secondValue = parseFloat(inputValue);
+            inputValue = "";
+            firstValue = operate(firstValue, secondValue, operand);
+            operand = operator.textContent;
+        }
+        ravno = false;
+        operand = operator.textContent;
+        inputValue = "";
+    }
+    else{
+        firstValue = parseFloat(inputValue);
+        inputValue = "";
+        operand = operator.textContent;
+        ravno = false;
+    }
+}
+
 backspace.addEventListener("click", deleteElement);
+
 
 
 let inputValue = "";
@@ -91,44 +144,6 @@ clear.addEventListener("click", () => {
     operand = "";
 });
 
-numbers.forEach(number => number.addEventListener("click",function(e){
-    if(ravno){
-        inputValue = "";
-        firstValue = "";
-        ravno = false;
-    }
-    if(e.target.innerText === "."){
-        dotButton.disabled = true;
-    };
-    console.log(e.target.innerText)
-    inputValue += e.target.innerText;
-    output.textContent =  inputValue;
-}));
+numbers.forEach(number => number.addEventListener("click", () => inputNumbers(number)));
 
-operators.forEach(operator => operator.addEventListener("click",function(e){
-    dotButton.disabled = false;
-    if(e.target.textContent === "="){
-        secondValue = parseFloat(inputValue);
-        firstValue = operate(firstValue, secondValue, operand);
-        inputValue = firstValue;
-        operand = "";
-        ravno = true;
-    }
-    else if(e.target.textContent !== "=" && firstValue.length !== 0){
-        if(operand.length !== 0){
-            secondValue = parseFloat(inputValue);
-            inputValue = "";
-            firstValue = operate(firstValue, secondValue, operand);
-            operand = e.target.textContent;
-        }
-        ravno = false;
-        operand = e.target.textContent;
-        inputValue = "";
-    }
-    else{
-        firstValue = parseFloat(inputValue);
-        inputValue = "";
-        operand = e.target.textContent;
-        ravno = false;
-    }
-}))
+operators.forEach(operator => operator.addEventListener("click", () => inputOperator(operator)))
