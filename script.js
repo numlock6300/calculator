@@ -30,26 +30,31 @@ function operate(firstNumber, secondNumber, operator){
             console.log("add")
             result = Math.round(add(firstNumber,secondNumber) * 1000) / 1000;
             output.textContent =  result;
+            supportOutput.textContent = `${firstNumber} +  ${secondNumber} = ${result}`;
             return result;
         case "-":
             console.log("subtract")
             result = Math.round(subtract(firstNumber, secondNumber)* 1000) / 1000;
              output.textContent = result;
+             supportOutput.textContent = `${firstNumber} -  ${secondNumber} = ${result}`;
              return result;
         case "*":
             console.log("multiply")
             result = Math.round(multiply(firstNumber,secondNumber) * 1000) / 1000;
              output.textContent = result;
+             supportOutput.textContent = `${firstNumber} *  ${secondNumber} = ${result}`;
              return result;
         case "/":
             console.log("divide")
             result = Math.round(divide(firstNumber, secondNumber) * 1000) / 1000;
              output.textContent = result;
+             supportOutput.textContent = `${firstNumber} /  ${secondNumber} = ${result}`;
              return result;
         case "":
             //console.log(firstNumber, secondNumber);
             result = firstNumber = secondNumber;
             output.textContent = firstNumber;
+            supportOutput.textContent = "";
             ///console.log(`result is  ${result}`);
             return result;
         default:
@@ -68,6 +73,7 @@ let numbers = Array.from(document.querySelectorAll(".number"));
 let operators = Array.from(document.querySelectorAll(".operator"));
 let dotButton = document.querySelector("#dot");
 let backspace = document.querySelector("#backspace");
+let supportOutput = document.querySelector("#support-output");
 
 
 document.addEventListener("keydown", function(e){
@@ -106,6 +112,7 @@ function inputOperator(operator){
     dotButton.disabled = false;
     if(operator.textContent === "="){
         secondValue = parseFloat(inputValue);
+        if(!secondValue){secondValue = 0};
         firstValue = operate(firstValue, secondValue, operand);
         inputValue = firstValue;
         operand = "";
@@ -114,16 +121,19 @@ function inputOperator(operator){
     else if(operator.textContent !== "=" && firstValue.length !== 0){
         if(operand.length !== 0){
             secondValue = parseFloat(inputValue);
+            if(!secondValue){return}
             inputValue = "";
             firstValue = operate(firstValue, secondValue, operand);
             operand = operator.textContent;
         }
         ravno = false;
         operand = operator.textContent;
+        supportOutput.textContent = `${firstValue} ${operator.textContent}`;
         inputValue = "";
     }
     else{
         firstValue = parseFloat(inputValue);
+        supportOutput.textContent = `${inputValue} ${operator.textContent}`;
         inputValue = "";
         operand = operator.textContent;
         ravno = false;
@@ -142,6 +152,7 @@ clear.addEventListener("click", () => {
     firstValue = "";
     secondValue = "";
     operand = "";
+    supportOutput.textContent = "";
 });
 
 numbers.forEach(number => number.addEventListener("click", () => inputNumbers(number)));
