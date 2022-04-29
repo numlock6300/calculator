@@ -9,12 +9,14 @@
     <body>
         <div id="main-container">
             <div id="output-container">
-                <output id="support-output"></output>
-                <output id="output">0</output>
+                <output id="support-output" class="output"></output>
+                <output id="main-output" class="output">0</output>
             </div>
-            <div id="numbers-container">
-                <button id="clear">C</button>
-                <button id="backspace" data-key="Backspace">del</button>
+            <div id="buttons-container">
+                <div id="support-buttons" >
+                    <button id="clear" class="buttons" >C</button>
+                    <button id="backspace" class="buttons" data-key="Backspace">del</button>
+                 </div>
                 <div class="button-rows">
                     <button id="seven" data-key="7" class="buttons number">7</button>
                     <button id="eight" data-key="8" class="buttons number">8</button>
@@ -39,9 +41,6 @@
                     <button id="plus" data-key="+" class="buttons operator">+</button>
                     <button id="equal" data-key="=" class="buttons operator">=</button>
                 </div>
-            </div>
-            <div id="operators-container">
-
             </div>
         </div>
     </body>

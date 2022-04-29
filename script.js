@@ -67,7 +67,7 @@ let secondValue = "";
 let operand = "";
 let dot = false;
 
-let output = document.querySelector("#output");
+let output = document.querySelector("#main-output");
 let clear = document.querySelector("#clear");
 let numbers = Array.from(document.querySelectorAll(".number"));
 let operators = Array.from(document.querySelectorAll(".operator"));
@@ -121,7 +121,11 @@ function inputOperator(operator){
     else if(operator.textContent !== "=" && firstValue.length !== 0){
         if(operand.length !== 0){
             secondValue = parseFloat(inputValue);
-            if(!secondValue){return}
+            if(!secondValue){
+                operand = operator.textContent;
+                supportOutput.textContent = `${firstValue} ${operand}`;
+                return
+            }
             inputValue = "";
             firstValue = operate(firstValue, secondValue, operand);
             operand = operator.textContent;
@@ -133,6 +137,7 @@ function inputOperator(operator){
     }
     else{
         firstValue = parseFloat(inputValue);
+        if(!firstValue){firstValue = 0;}
         supportOutput.textContent = `${inputValue} ${operator.textContent}`;
         inputValue = "";
         operand = operator.textContent;
